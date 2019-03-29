@@ -105,6 +105,13 @@ module.exports = class Transaction {
     // 4) From here, you can gather the amount of **input** available to
     //      this transaction.
 
+
+    //  console.log("Inputs :", this.inputs);
+    //  console.log("Outputs :", this.outputs);
+    //  console.log("UTXOS: ", utxos);
+
+    return true;
+
   }
 
   /**

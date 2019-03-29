@@ -196,7 +196,8 @@ module.exports = class Block {
     // 2) Add newly created UTXOs to the UTXO set.
     // 3) Calculate the miner's transaction fee, determined by the difference between the inputs and the outputs.
     //    The addTransactionFee method might help you with this part.
-
+    console.log('TX',tx);
+    console.log('Force Accept')
   }
 
   /**

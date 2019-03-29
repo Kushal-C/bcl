@@ -98,12 +98,40 @@ module.exports = class Wallet {
     //
     // Return an object containing the array of inputs and the
     // amount of change needed.
+    /*
+    * An input is a triple of a transaction ID, the index of an output
+   * within that transaction ID, and the public key that matches the
+   * hash of the public key from a previous output.  It is in the form:
+   *  {txID, outputIndex, pubKey, sig}
+    */
 
+    // console.log(this.coins);
+    // console.log(this.addresses);
+    // Make sure the signature is valid
+   // assert.isTrue(utils.verifySignature(pubKey, tx.outputs[outputIndex], sig));
+    let amountLeft = amount;
+    let inputs =[];
+    let changeAmt = 0;
+    for(let coin of this.coins){
+      let tempInput = {};
+      if(amountLeft > 0) {
+        amountLeft -= coin.output.amount;
+        tempInput.txID = coin.txID;
+        tempInput.outputIndex = coin.outputIndex;
+        tempInput.pubKey = this.addresses[coin.output.address].public;
+        let sig = utils.sign(this.addresses[coin.output.address].private, coin.output);
+        tempInput.sig = sig;
+        inputs.push(tempInput);
+        //Remove most recently spent coin
+        this.coins.shift();
+      }
+    }
+    changeAmt = Math.abs(amountLeft);
 
     // Currently returning default values.
     return {
-      inputs: [],
-      changeAmt: 0,
+      inputs: inputs,
+      changeAmt: changeAmt,
     };
 
   }
