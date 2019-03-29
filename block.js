@@ -189,15 +189,23 @@ module.exports = class Block {
     // **YOUR CODE HERE**
     //
     // First, store the transaction.
+    this.transactions.set(tx.id,tx);
     //
     // Next, you will need to update the UTXOs to account for changes made by the transaction.
     // That means you will need to:
-    // 1) Delete the spent UTXOs from the UTXO set.
+    // 1) Delete the spent UTXOs from the UTXO set
+    for(let input in tx.inputs){
+      
+    }
+      //console.log('UTXOS in this block',tx);
+      // console.log(tx.inputs);
+      // console.log(tx.outputs);
     // 2) Add newly created UTXOs to the UTXO set.
+    this.utxos.push(tx.outputs);
     // 3) Calculate the miner's transaction fee, determined by the difference between the inputs and the outputs.
     //    The addTransactionFee method might help you with this part.
-    console.log('TX',tx);
-    console.log('Force Accept')
+    // console.log('TX',tx);
+    // console.log('Force Accept')
   }
 
   /**
