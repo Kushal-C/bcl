@@ -104,13 +104,39 @@ module.exports = class Transaction {
     //      is valid.
     // 4) From here, you can gather the amount of **input** available to
     //      this transaction.
+    /*
+    Inputs : [ 
+      { 
+      txID: '70c1ed2fa3d89d4f71358c4d29be5e2da163a4fc850729f103e3967ca7a3668a',
+      outputIndex: 1,
+      pubKey: '-----BEGIN RSA PUBLIC KEY-----\nMIIBCgKCAQEA80qhd0p2hhTZ830egKhFFGpHFPbF9E8TrTF8y5GY2dBmMC898dQufzvRMqwF\nK1vaRAgSj6QYp1lnKM8AHHACWudUyFki9Us3Zz3nu5xtvc9apq787ebsaoFzxLyXjbrmwKGc\nMZNNZMybIwjjbqnGowsjyq5cvFSX2xqV9WNMcbz/4sW4OzPop8DQHof9B8sqZO9/esdG7doW\nIe+b0HMLLNEvzvwWTgv0Tk9O6p1czxhuZzjEMDeGE1pdv8u26uv+PIdwItXAjhzF7zx98IF3\neo1Y4ASscZ0WgObUAJVePNKvMV6CVnZ8W2cG8zuJlzYiEM45nIw9Qjav+x7Sru1iHwIDAQAB\n-----END RSA PUBLIC KEY-----\n',
+      sig: '94607549767882adf1b0a790ac97f2b93341dd8895056a467263ed8e205659e7c88faa26773026e72c8e1f087d7c64efa2c78d3b9d58968e76ae879624b9866b7aab23bd4aeb62c91ef247fcee2f8e2d1c61bcdaba5d55163281821cb2212317e8d32735360635eed3e10746890b92ce139e6eb945f304b7c00ddca27f6113e83b1c811950fe3ca4951cd2f964193f5cbc28503032e15eda0fb5dc8e3f7835278881f76aa11467eae11eba4d104403a69718600490d6078050e284c7ab1e080af8d95fac58c24e4fae39bfb929914de9a296b901b69c2010e2a27d1b44b893d721d03c109155c2aad2b2b511d7794b3609dbac4ff013e5d8fb31dddaf3adf396' } ]
 
+    Outputs : [ 
+      { amount: 20,
+      address: 'WhvQQvhWJvG+leLkd1YCSThbOpI+gvUoLPGPqDrzj3o=' },
+     { amount: 10,
+      address: 'W/c2Ax9d6PuvogoakfTKQJ6jGqEpE1vYtuIeR01v0TY=' } ]
 
-    //  console.log("Inputs :", this.inputs);
-    //  console.log("Outputs :", this.outputs);
-    //  console.log("UTXOS: ", utxos);
-
-    return true;
+    UTXOS:  { 
+      '70c1ed2fa3d89d4f71358c4d29be5e2da163a4fc850729f103e3967ca7a3668a':
+        [ { amount: 1,
+           address: 'W/c2Ax9d6PuvogoakfTKQJ6jGqEpE1vYtuIeR01v0TY=' },
+         { amount: 42,
+          address: 'W/c2Ax9d6PuvogoakfTKQJ6jGqEpE1vYtuIeR01v0TY=' } ] }
+    */
+    let found = false;
+    for(let input of this.inputs){
+      for(let utxo in utxos){
+        for(let obj of utxos[utxo]){
+          if(utils.verifySignature(input.pubKey, obj, input.sig)){
+            found = true;
+          }
+        }
+      }
+    }
+    
+    return found;
 
   }
 
